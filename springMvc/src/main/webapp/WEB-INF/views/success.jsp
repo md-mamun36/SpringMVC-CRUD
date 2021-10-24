@@ -53,6 +53,7 @@
 </table>
 <div class="text-center" >
 <button  class="btn btn-primary " style="font-size: 20px;"><a style="color: white" href="registration"><i class="fas fa-plus-circle" style="font-size: 25px;"></i> Add</a></button>
+<button  class="btn btn-success " style="font-size: 20px;"><a style="color: white" href="report"> Report</a></button>
 </div>
  	</div>
  </div>

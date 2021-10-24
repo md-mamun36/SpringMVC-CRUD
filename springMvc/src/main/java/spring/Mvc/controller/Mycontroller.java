@@ -1,18 +1,29 @@
 package spring.Mvc.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import spring.Mvc.model.User;
 import spring.Mvc.service.UserService;
 
@@ -98,6 +109,26 @@ public class Mycontroller {
 	@RequestMapping("")
 	public String myindex() {
 		return "redirect:/success";
+	}
+	
+	
+	//to grnarate report
+	@RequestMapping("/report")
+	public String jsReport() throws JRException {
+		List<User> alluser = this.userServic.getAlluser();
+		try {
+			Map <String , Object> param=new HashMap<String , Object>();
+			param.put("Parameters", "Md. Al Mamun");
+			File f=ResourceUtils.getFile("classpath:Simple_Blue.jrxml");
+			JRBeanCollectionDataSource jrben=new JRBeanCollectionDataSource(alluser);
+			JasperReport compileReport = JasperCompileManager.compileReport(f.getAbsolutePath());
+			JasperPrint fillReport = JasperFillManager.fillReport(compileReport, param,jrben);
+			JasperExportManager.exportReportToPdfFile(fillReport, "C:\\Users\\mdmam\\OneDrive\\Desktop\\jsReport\\AllItem.pdf");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return"redirect:/success";
 	}
 }
 
